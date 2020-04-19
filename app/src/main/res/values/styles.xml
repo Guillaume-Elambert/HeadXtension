@@ -1,0 +1,42 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+
+    <style name="warningMessage">
+        <item name="android:background">@drawable/rounded_warning_background</item>
+        <item name="android:textColor">@color/warningTxt</item>
+        <item name="android:textSize">@dimen/warningText</item>
+        <item name="android:padding">@dimen/warningPadding</item>
+    </style>
+
+
+    <style name="password">
+        <item name="android:background">@drawable/rounded_field_background</item>
+        <item name="android:paddingTop">@dimen/fieldPaddingTop</item>
+        <item name="android:paddingBottom">@dimen/fieldPaddingBottom</item>
+        <item name="android:paddingLeft">@dimen/fieldPaddingLeft</item>
+        <item name="android:paddingRight">@dimen/fieldPaddingRight</item>
+    </style>
+
+    <style name="button">
+        <item name="android:background">@drawable/rounded_button_background</item>
+    </style>
+
+</resources>

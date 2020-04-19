@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Headxtension</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <string name="messagePrevDev">Cette application est en cours de développement et n\'est pas encore suffisamment sécurisée. Il est donc déconseillé d\'y renseigner de réelles informations de connexion.</string>
+    <string name="messagePrevSignin">Attention le mot de passe que vous entrez ci-dessous vous permettra d\'accéder plus tard à l\'application. Il ne pourra en aucun cas être modifié si vous le perdez, assurez-vous bien de le conserver quelque part (éviter tout support numérique et riviligier le papier). Vous pourrez également vous connecter via un QR Code qui vous sera fourni et que vous pourrez imprimer.</string>
+
+    <!-- Messages et tritres boîte de dialogue -->
+
+    <string name="titreConfirmation">Etes-vous sûr(e) ?</string>
+    <string name="msgConfirmation">Le mot de passe que vous venez d\'entrer ne pourra pas être réinitialisé, assurez-vous de le stocker sur un support fiable avant de continuer.</string>
+
+    <string name="titreErreurMdp">Erreur de mot de passe maître</string>
+    <string name="msgErreurVerifMdp">Les 2 champs du mot de passe ne sont pas identiques, veuillez recommencer.</string>
+    <string name="msgErreurRegexMdp">Votre mot de passe doit contenir au moins 8 caractères et avoir des minuscules, des majuscules, des chiffres et des caractères spéciaux.</string>
+    <string name="titreErreur">Erreur !</string>
+    <string name="missingPassword">Le mot de passe maître doit être renseigné !</string>
+    <string name="missingPasswordCheck">Vous devez saisir une deuxième fois votre mot de passe maître !</string>
+
+    <string name="btnValider">Valider</string>
+    <string name="btnOk">Ok</string>
+    <string name="btnAnnuler">Annuler</string>
+
+    <!-- Fin messages et tritres boîte de dialogue -->
+
+    <string name="passwordEntryHint">Mot de passe maître</string>
+    <string name="passwordEntryCheckHint">Vérification du mot de passe maître</string>
+</resources>

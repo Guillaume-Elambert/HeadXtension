@@ -1,0 +1,17 @@
+<resources>
+
+    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="warningText">14dp</dimen>
+    <dimen name="warningPadding">15dp</dimen>
+    <dimen name="warningMsgRoundedCorner">6dp</dimen>
+
+    <dimen name="fieldPaddingTop">10dp</dimen>
+    <dimen name="fieldPaddingBottom">10dp</dimen>
+    <dimen name="fieldPaddingLeft">20dp</dimen>
+    <dimen name="fieldPaddingRight">20dp</dimen>
+    <dimen name="fieldRoundedCorner">30dp</dimen>
+
+    <dimen name="buttonRoundedCorner">6dp</dimen>
+
+</resources>

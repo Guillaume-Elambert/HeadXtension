@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- View background color -->
+    <solid
+        android:color="@color/fieldBg" />
+
+    <!-- View border color and width -->
+    <stroke
+        android:color="#95989A"
+        android:width="1dp" />
+
+    <!-- The radius makes the corners rounded -->
+    <corners android:radius="@dimen/buttonRoundedCorner" />
+
+</shape>
