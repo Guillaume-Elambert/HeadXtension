@@ -35,8 +35,5 @@
         <item name="android:paddingRight">@dimen/fieldPaddingRight</item>
     </style>
 
-    <style name="button">
-        <item name="android:background">@drawable/rounded_button_background</item>
-    </style>
 
 </resources>
