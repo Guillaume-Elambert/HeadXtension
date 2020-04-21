@@ -19,6 +19,19 @@
     <string name="loginWrongPassword">Mot de passe incorrect</string>
 
 
+    <!-- Champs de saisie -->
+
+    <string name="masterPasswordEntryHint">Mot de passe maître</string>
+    <string name="masterPasswordEntryCheckHint">Vérification du mot de passe maître</string>
+    <string name="nameEntryHint">Nom</string>
+    <string name="urlEntryHint">URL</string>
+    <string name="usernameEntryHint">Nom d\'utilisateur</string>
+    <string name="passwordEntryHint">Mot de passe</string>
+
+    <!-- Fin champs de saisie -->
+
+
+
     <!-- Messages et tritres boîte de dialogue -->
 
     <string name="titreConfirmation">Etes-vous sûr(e) ?</string>
@@ -37,6 +50,4 @@
 
     <!-- Fin messages et tritres boîte de dialogue -->
 
-    <string name="passwordEntryHint">Mot de passe maître</string>
-    <string name="passwordEntryCheckHint">Vérification du mot de passe maître</string>
 </resources>

@@ -6,11 +6,10 @@
     <dimen name="warningPadding">15dp</dimen>
     <dimen name="warningMsgRoundedCorner">6dp</dimen>
 
-    <dimen name="fieldPaddingTop">10dp</dimen>
-    <dimen name="fieldPaddingBottom">10dp</dimen>
+    <dimen name="fieldPaddingTop">40dp</dimen>
+    <dimen name="fieldPaddingBottom">0dp</dimen>
     <dimen name="fieldPaddingLeft">20dp</dimen>
     <dimen name="fieldPaddingRight">20dp</dimen>
-    <dimen name="fieldRoundedCorner">30dp</dimen>
 
     <dimen name="buttonRoundedCorner">6dp</dimen>
 

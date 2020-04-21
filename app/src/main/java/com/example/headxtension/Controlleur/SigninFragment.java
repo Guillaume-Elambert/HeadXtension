@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,8 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.regex.Pattern;
+
+import static android.content.ContentValues.TAG;
 
 
 public class SigninFragment extends Fragment {
@@ -293,8 +296,8 @@ public class SigninFragment extends Fragment {
             //on ajoute un bouton de validation
             adb.setPositiveButton(btnValidation, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        new HeadXtensionDAO(getActivity(), ((TextView)requireView().findViewById(R.id.passwordSignin)).getText().toString());
-
+                        new HeadXtensionDAO(requireActivity().getBaseContext(), ((TextView)requireView().findViewById(R.id.passwordSignin)).getText().toString());
+                        Log.d(TAG,((TextView)requireView().findViewById(R.id.passwordSignin)).getText().toString());
                         session.setRegistrationState(true);
                         session.setAuthenticationState(true);
 

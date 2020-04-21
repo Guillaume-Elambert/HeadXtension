@@ -18,10 +18,24 @@
         tools:layout="@layout/fragment_login" />
 
     <fragment
-        android:id="@+id/MainPageFragment"
-        android:name="com.example.headxtension.Controlleur.SecondFragment"
+        android:id="@+id/NewCredentialFragment"
+        android:name="com.example.headxtension.Controlleur.NewCredentialFragment"
         android:label="@string/main_page_fragment_label"
-        tools:layout="@layout/fragment_main_page" />
+        tools:layout="@layout/fragment_new_credential_entry" />
+
+    <fragment
+        android:id="@+id/MainPageFragment"
+        android:name="com.example.headxtension.Controlleur.MainPageFragment"
+        android:label="@string/main_page_fragment_label"
+        tools:layout="@layout/fragment_main_page" >
+
+        <action
+            android:id="@+id/action_MainPageFragment_to_NewCredentialFragment"
+            app:destination="@id/NewCredentialFragment" />
+
+    </fragment>
+
+
 
 
 </navigation>

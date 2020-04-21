@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.util.Base64;
 import android.util.Log;
 import net.sqlcipher.database.SQLiteDatabase;
+import net.sqlcipher.database.SQLiteException;
 
 import com.example.headxtension.R;
 
@@ -25,13 +26,7 @@ public class HeadXtensionDAO {
     public HeadXtensionDAO(Context ct, String password){
         SQLiteDatabase.loadLibs(ct);
         BdSQLiteOpenHelper bdOpener = new BdSQLiteOpenHelper(ct, ct.getString(R.string.dbName), null, version);
-
-        try {
-            accesBD = bdOpener.getWritableDatabase(encrypt(password));
-        } catch (Exception e) {
-            accesBD = bdOpener.getWritableDatabase(password);
-            Log.e(TAG, e.toString());
-        }
+        accesBD = bdOpener.getWritableDatabase(password);
     }
 
 
@@ -45,25 +40,27 @@ public class HeadXtensionDAO {
 
 
     public static boolean checkBDOpenable(Context ct, String password){
-        SQLiteDatabase checkDB = null;
+        boolean exec = false;
 
         if(checkDBExist(ct)) {
             BdSQLiteOpenHelper bdOpener = new BdSQLiteOpenHelper(ct, ct.getString(R.string.dbName), null, version);
-            try {
-                /*if(accesBD.isOpen()){
-                    accesBD.close();
-                }*/
+
+            if(accesBD != null && accesBD.isOpen()){
+                accesBD.close();
+            } else {
                 SQLiteDatabase.loadLibs(ct);
-                checkDB = bdOpener.getReadableDatabase(encrypt(password));
-                checkDB.close();
-                //accesBD = checkDB;
-            } catch (Exception e) {
-                Log.e(TAG, e.toString());
+            }
+
+            try{
+                bdOpener.getReadableDatabase(password).close();
+                exec = true;
+            } catch (SQLiteException e){
+                Log.e(TAG,e.toString());
             }
 
         }
 
-        return checkDB != null;
+        return exec;
     }
 
     /*--------------------------------   Start Folder   --------------------------------*/

@@ -40,18 +40,17 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/password_text_input"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/field"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:hint="@string/passwordEntryHint"
+            android:hint="@string/masterPasswordEntryHint"
             app:errorEnabled="true"
-            app:layout_constraintEnd_toEndOf="@+id/messagePrevSignin"
-            app:layout_constraintStart_toStartOf="@+id/messagePrevSignin"
-            app:layout_constraintTop_toBottomOf="@+id/messagePrevSignin"
-            app:passwordToggleEnabled="true"
+            app:helperText="@string/msgRegexMdp"
             app:helperTextEnabled="true"
-            app:helperText="@string/msgRegexMdp">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/messagePrevSignin"
+            app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passwordSignin"
@@ -63,14 +62,13 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/check_password_text_input"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/field"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:hint="@string/passwordEntryCheckHint"
+            android:hint="@string/masterPasswordEntryCheckHint"
             app:errorEnabled="true"
-            app:layout_constraintEnd_toEndOf="@+id/password_text_input"
-            app:layout_constraintStart_toStartOf="@+id/password_text_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/password_text_input"
             app:passwordToggleEnabled="true">
 

@@ -21,13 +21,12 @@ public class BdSQLiteOpenHelper extends SQLiteOpenHelper  {
     BdSQLiteOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
         this.mContext = context;
-        context.deleteDatabase( name /*"DB_HeadXtension.db"*/);
     }
 
     // Called when the database connection is being configured.
     // Configure database settings for things like foreign key support, write-ahead logging, etc.
     @Override
-    public void onConfigure(net.sqlcipher.database.SQLiteDatabase db) {
+    public void onConfigure(SQLiteDatabase db) {
         super.onConfigure(db);
         db.setForeignKeyConstraintsEnabled(true);
     }

@@ -27,12 +27,13 @@
     </style>
 
 
-    <style name="password">
-        <item name="android:background">@drawable/rounded_field_background</item>
-        <item name="android:paddingTop">@dimen/fieldPaddingTop</item>
-        <item name="android:paddingBottom">@dimen/fieldPaddingBottom</item>
-        <item name="android:paddingLeft">@dimen/fieldPaddingLeft</item>
-        <item name="android:paddingRight">@dimen/fieldPaddingRight</item>
+    <style name="field" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_marginTop">@dimen/fieldPaddingTop</item>
+        <item name="android:layout_marginBottom">@dimen/fieldPaddingBottom</item>
+        <item name="android:layout_marginStart">@dimen/fieldPaddingLeft</item>
+        <item name="android:layout_marginLeft">@dimen/fieldPaddingLeft</item>
+        <item name="android:layout_marginEnd">@dimen/fieldPaddingRight</item>
+        <item name="android:layout_marginRight">@dimen/fieldPaddingRight</item>
     </style>
 
 
