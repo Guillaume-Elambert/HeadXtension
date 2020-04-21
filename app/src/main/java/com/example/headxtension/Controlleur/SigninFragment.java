@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +16,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
+import com.example.headxtension.Modele.HeadXtensionDAO;
+import com.example.headxtension.Modele.Session;
 import com.example.headxtension.R;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.regex.Pattern;
 
+
 public class SigninFragment extends Fragment {
 
+    private NavController navController;
+    private Session session = Session.getInstance();
 
     @Override
     public View onCreateView(
@@ -41,142 +46,137 @@ public class SigninFragment extends Fragment {
     public void onViewCreated(@NonNull final View view, Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
 
-        final EditText password = view.findViewById(R.id.passwordSignin);
-        final EditText passwordCheck = view.findViewById(R.id.checkPasswordSignin);
+        if(HeadXtensionDAO.checkDBExist(getActivity())){
+            navController.navigate(R.id.MainPageFragment);
+        } else {
 
-        final TextInputLayout passwordLayout = view.findViewById(R.id.password_text_input);
-        final TextInputLayout chackPasswordLayout =  view.findViewById(R.id.check_password_text_input);
+            final EditText password = view.findViewById(R.id.passwordSignin);
+            final EditText passwordCheck = view.findViewById(R.id.checkPasswordSignin);
 
-        //Ajout d'un évennement de saisi sur le champ du mot de passe maître
-        password.addTextChangedListener(new TextWatcher(){
+            final TextInputLayout passwordLayout = view.findViewById(R.id.password_text_input);
+            final TextInputLayout chackPasswordLayout = view.findViewById(R.id.check_password_text_input);
 
-            /*
-             * Entrée : l'utilisateur saisi du texte
-             */
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count){
+            //Ajout d'un évennement de saisi sur le champ du mot de passe maître
+            password.addTextChangedListener(new TextWatcher() {
 
                 /*
-                 * Entrée : le mot de passe a une taille supérieure à 0
-                 *          => on continu les vérifs
-                 *
-                 * Sinon => on remet le texte sur le contenu du mot de passe à la normale
+                 * Entrée : l'utilisateur saisi du texte
                  */
-                if(password.getText().toString().length()>0) {
-
-                    MaterialButton btnValider = view.findViewById(R.id.btnValider);
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
 
                     /*
-                     * Entrée : le mot de passe ne correspond pas au format requis
-                     *          => affichage d'un message d'erreur sous le champ
+                     * Entrée : le mot de passe a une taille supérieure à 0
+                     *          => on continu les vérifs
                      *
                      * Sinon => on remet le texte sur le contenu du mot de passe à la normale
                      */
-                    if (!regexMdp(password.getText().toString().trim())) {
-                        passwordLayout.setError(getString(R.string.msgRegexMdp));
-                        if(btnValider.isEnabled()){
-                            btnValider.setEnabled(false);
-                        }
-                    } else {
-                        TextInputLayout checkPwdLayout = view.findViewById(R.id.check_password_text_input);
-                        passwordLayout.setHelperText(getString(R.string.msgRegexMdp));
-                        if(password.getText().toString().trim().equals(passwordCheck.getText().toString().trim())){
-                            Log.d("verif",String.valueOf(password.getText().toString().trim().equals(passwordCheck.getText().toString().trim())));
-                            btnValider.setEnabled(true);
-                            checkPwdLayout.setError("");
-                        } else {
-                            btnValider.setEnabled(false);
+                    if (password.getText().toString().length() > 0) {
 
-                            if(passwordCheck.getText().toString().length()>0) {
-                                checkPwdLayout.setError("Vos mot de passe ne correspondent pas.");
-                            } else {
-                                checkPwdLayout.setError("");
-                            }
-                        }
-                    }
-                } else {
-                    passwordLayout.setHelperText(getString(R.string.msgRegexMdp));
-                }
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after){
-                //Rien
-            }
-
-
-            /*
-             * Entrée : la saisi du mit de passe maître est finie
-             *          => on ajoute un évennement de saisie sur le chemp de vérif du mdp maître
-             */
-            @Override
-            public void afterTextChanged(Editable s){
-                if(regexMdp(password.getText().toString().trim())) {
-                    Log.d("debug regex", (String.valueOf(regexMdp(password.getText().toString().trim()))));
-                    passwordCheck.addTextChangedListener(new TextWatcher() {
+                        MaterialButton btnValider = view.findViewById(R.id.btnValider);
 
                         /*
-                         * Entrée : l'utilisateur saisi du texte
+                         * Entrée : le mot de passe ne correspond pas au format requis
+                         *          => affichage d'un message d'erreur sous le champ
+                         *
+                         * Sinon => on remet le texte sur le contenu du mot de passe à la normale
                          */
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            MaterialButton btnValider = view.findViewById(R.id.btnValider);
-
-                            /*
-                             * Entrée : le mot de passe correspond au format requis
-                             *          => on active le bouton de validation
-                             *
-                             * Sinon => on désactive le bouton
-                             */
-                            if (password.getText().toString().trim().equals(passwordCheck.getText().toString().trim())) {
-                                btnValider.setEnabled(true);
-                            } else {
+                        if (!regexMdp(password.getText().toString())) {
+                            passwordLayout.setError(getString(R.string.msgRegexMdp));
+                            if (btnValider.isEnabled()) {
                                 btnValider.setEnabled(false);
                             }
-                        }
-
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                            //Rien
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable s) {
+                        } else {
                             TextInputLayout checkPwdLayout = view.findViewById(R.id.check_password_text_input);
-                            if(passwordCheck.getText().toString().length()>0 && !passwordCheck.getText().toString().trim().equals(password.getText().toString().trim())) {
-                                checkPwdLayout.setError("Vos mot de passe ne correspondent pas.");
-                            } else {
+                            passwordLayout.setHelperText(getString(R.string.msgRegexMdp));
+                            if (password.getText().toString().trim().equals(passwordCheck.getText().toString().trim())) {
+                                btnValider.setEnabled(true);
                                 checkPwdLayout.setError("");
+                            } else {
+                                btnValider.setEnabled(false);
+
+                                if (passwordCheck.getText().toString().length() > 0) {
+                                    checkPwdLayout.setError("Vos mot de passe ne correspondent pas.");
+                                } else {
+                                    checkPwdLayout.setError("");
+                                }
                             }
                         }
-
-                    });
+                    } else {
+                        passwordLayout.setHelperText(getString(R.string.msgRegexMdp));
+                    }
                 }
-            }
 
-        });
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    //Rien
+                }
 
-        //ajout d'un évènement de clic sur le bouton de validation du formulaire
-        view.findViewById(R.id.btnValider).setOnClickListener(new View.OnClickListener() {
 
-            /*
-             * Entrée : l'utilisation clic sur le bouton de validation du formulaire
-             */
-            @Override
-            public void onClick(View view) {
-                boolean isGood = false;
-
-                //TODO : Verif bdd existe
                 /*
-                 * Entrée : la base de données n'existe pas (donc 1ere connexion)
-                 *          => affiche le formulaire pour choisir le mdp maître
-                 *
-                 * Sinon => redirection page de connexion
+                 * Entrée : la saisi du mit de passe maître est finie
+                 *          => on ajoute un évennement de saisie sur le chemp de vérif du mdp maître
                  */
-                if(true){
-                    String passwordStr = password.getText().toString().trim();
-                    String passwordCheckStr = passwordCheck.getText().toString().trim();
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (regexMdp(password.getText().toString())) {
+                        passwordCheck.addTextChangedListener(new TextWatcher() {
+
+                            /*
+                             * Entrée : l'utilisateur saisi du texte
+                             */
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                MaterialButton btnValider = view.findViewById(R.id.btnValider);
+
+                                /*
+                                 * Entrée : le mot de passe correspond au format requis
+                                 *          => on active le bouton de validation
+                                 *
+                                 * Sinon => on désactive le bouton
+                                 */
+                                if (password.getText().toString().trim().equals(passwordCheck.getText().toString().trim())) {
+                                    btnValider.setEnabled(true);
+                                } else {
+                                    btnValider.setEnabled(false);
+                                }
+                            }
+
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                //Rien
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+                                TextInputLayout checkPwdLayout = view.findViewById(R.id.check_password_text_input);
+                                if (passwordCheck.getText().toString().length() > 0 && !passwordCheck.getText().toString().trim().equals(password.getText().toString().trim())) {
+                                    checkPwdLayout.setError("Vos mot de passe ne correspondent pas.");
+                                } else {
+                                    checkPwdLayout.setError("");
+                                }
+                            }
+
+                        });
+                    }
+                }
+
+            });
+
+            //ajout d'un évènement de clic sur le bouton de validation du formulaire
+            view.findViewById(R.id.btnValider).setOnClickListener(new View.OnClickListener() {
+
+                /*
+                 * Entrée : l'utilisation clic sur le bouton de validation du formulaire
+                 */
+                @Override
+                public void onClick(View view) {
+
+
+                    String passwordStr = password.getText().toString();
+                    String passwordCheckStr = passwordCheck.getText().toString();
 
                     /*
                      * Entrée : l'un des 2 champs de mot de passe n'a pas été renseigné
@@ -184,7 +184,7 @@ public class SigninFragment extends Fragment {
                      *
                      * Sinon => on continu les vérifs
                      */
-                    if(passwordStr.length()==0 ||passwordCheckStr.length()==0){
+                    if (passwordStr.length() == 0 || passwordCheckStr.length() == 0) {
 
                         /*
                          * Entrée : le mot de passe maître n'a pas été renseigné
@@ -192,10 +192,10 @@ public class SigninFragment extends Fragment {
                          *
                          * Sinon => on affiche un message d'erreur concernant le champ de vérif du mdp maître
                          */
-                        if(passwordStr.length()==0){
-                            afficherBoiteDialogue(getString(R.string.titreErreur),getString(R.string.missingPassword),getString(R.string.btnOk), null, false);
+                        if (passwordStr.length() == 0) {
+                            afficherBoiteDialogue(getString(R.string.titreErreur), getString(R.string.missingPassword), getString(R.string.btnOk), null, false);
                         } else {
-                            afficherBoiteDialogue(getString(R.string.titreErreur),getString(R.string.missingPasswordCheck),getString(R.string.btnOk), null, false);
+                            afficherBoiteDialogue(getString(R.string.titreErreur), getString(R.string.missingPasswordCheck), getString(R.string.btnOk), null, false);
                         }
 
 
@@ -213,35 +213,22 @@ public class SigninFragment extends Fragment {
                              * Entrée : le mot de passe est conforme (8 car dont au moins 1 min., maj, chiffre et car. spé.)
                              *          => Redirection sur la page principale de l'application
                              */
-                            if(regexMdp(passwordStr)){
-                                afficherBoiteDialogue(getString(R.string.titreConfirmation),getString(R.string.msgConfirmation), getString(R.string.btnOk), getString(R.string.btnAnnuler), true);
+                            if (regexMdp(passwordStr)) {
+                                afficherBoiteDialogue(getString(R.string.titreConfirmation), getString(R.string.msgConfirmation), getString(R.string.btnOk), getString(R.string.btnAnnuler), true);
                             } else {
                                 passwordLayout.setError(getString(R.string.msgRegexMdp));
+                                resaisirMotDePasse();
                             }
                         } else {
-                            afficherBoiteDialogue(getString(R.string.titreErreurMdp),getString(R.string.msgErreurVerifMdp), getString(R.string.btnOk), null, false);
+                            afficherBoiteDialogue(getString(R.string.titreErreurMdp), getString(R.string.msgErreurVerifMdp), getString(R.string.btnOk), null, false);
+                            resaisirMotDePasse();
                         }
                     }
 
-                    passwordCheck.setText("");
-                    password.requestFocus();
-                    /*
-                     * Entrée : Curseur sur le champ de saisie du mot de passe
-                     *          => on affiche le clavier
-                     */
-                    if(password.hasFocus()) {
-                        InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        if(imm!=null) {
-                            imm.toggleSoftInput(0, 0);
-                        }
-                    }
 
-                } else {
-                    NavHostFragment.findNavController(SigninFragment.this)
-                            .navigate(R.id.action_FirstFragment_to_SecondFragment);
                 }
-            }
-        });
+            });
+        }
     }
 
 
@@ -306,9 +293,12 @@ public class SigninFragment extends Fragment {
             //on ajoute un bouton de validation
             adb.setPositiveButton(btnValidation, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        //TODO : Initialisation de la base de données
-                        NavHostFragment.findNavController(SigninFragment.this)
-                                .navigate(R.id.action_FirstFragment_to_SecondFragment);
+                        new HeadXtensionDAO(getActivity(), ((TextView)requireView().findViewById(R.id.passwordSignin)).getText().toString());
+
+                        session.setRegistrationState(true);
+                        session.setAuthenticationState(true);
+
+                        navController.navigate(R.id.MainPageFragment);
                     }
                 }
             );
@@ -317,10 +307,43 @@ public class SigninFragment extends Fragment {
         }
 
         if(btnAnnulation != null){
-            adb.setNegativeButton(btnAnnulation, null);
+            adb.setNegativeButton(btnAnnulation, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ((TextView) requireView().findViewById(R.id.checkPasswordSignin)).setText("");
+                    requireView().findViewById(R.id.passwordSignin).requestFocus();
+
+                    /*
+                     * Entrée : Curseur sur le champ de saisie du mot de passe
+                     *          => on affiche le clavier
+                     */
+                    if (requireView().findViewById(R.id.passwordSignin).hasFocus()) {
+                        InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        if (imm != null) {
+                            imm.toggleSoftInput(0, 0);
+                        }
+                    }
+                }
+            });
         }
 
         adb.show();
+    }
+
+    private void resaisirMotDePasse(){
+        ((TextView) requireView().findViewById(R.id.checkPasswordSignin)).setText("");
+        requireView().findViewById(R.id.passwordSignin).requestFocus();
+
+        /*
+         * Entrée : Curseur sur le champ de saisie du mot de passe
+         *          => on affiche le clavier
+         */
+        if (requireView().findViewById(R.id.passwordSignin).hasFocus()) {
+            InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.toggleSoftInput(0, 0);
+            }
+        }
     }
 
 

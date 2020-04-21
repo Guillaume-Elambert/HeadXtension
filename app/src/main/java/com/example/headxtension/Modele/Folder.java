@@ -9,12 +9,12 @@ public class Folder {
 
     private int id;
     private String name;
-    private ArrayList<Credentials> credentialsArrayList;
+    private ArrayList<Credential> credentialArrayList;
 
-    public Folder(int id, @NonNull String name, @Nullable ArrayList<Credentials> credentialsArrayList){
+    public Folder(int id, @NonNull String name, @Nullable ArrayList<Credential> credentialArrayList){
         this.id = id;
         this.name = name;
-        this.credentialsArrayList = credentialsArrayList;
+        this.credentialArrayList = credentialArrayList;
     }
 
     public int getId() {
@@ -33,11 +33,11 @@ public class Folder {
         this.name = name;
     }
 
-    public ArrayList<Credentials> getCredentialsArrayList() {
-        return credentialsArrayList;
+    public ArrayList<Credential> getCredentialArrayList() {
+        return credentialArrayList;
     }
 
-    public void setCredentialsArrayList(ArrayList<Credentials> credentialsArrayList) {
-        this.credentialsArrayList = credentialsArrayList;
+    public void setCredentialArrayList(ArrayList<Credential> credentialArrayList) {
+        this.credentialArrayList = credentialArrayList;
     }
 }

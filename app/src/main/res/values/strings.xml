@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">Headxtension</string>
+    <string name="dbName">DB_HeadXtension.db</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+    <string name="signin_fragment_label">Signin Fragment</string>
+    <string name="login_fragment_label">Login Fragment</string>
+    <string name="main_page_fragment_label">Main Page Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
@@ -14,6 +16,8 @@
     <string name="messagePrevSignin">Attention le mot de passe que vous entrez ci-dessous vous permettra d\'accéder plus tard à l\'application. Il ne pourra en aucun cas être modifié si vous le perdez, assurez-vous bien de le conserver quelque part (éviter tout support numérique et riviligier le papier). Vous pourrez également vous connecter via un QR Code qui vous sera fourni et que vous pourrez imprimer.</string>
 
     <string name="msgRegexMdp">Votre mot de passe doit contenir au moins 8 caractères et avoir des minuscules, des majuscules, des chiffres et des caractères spéciaux.</string>
+    <string name="loginWrongPassword">Mot de passe incorrect</string>
+
 
     <!-- Messages et tritres boîte de dialogue -->
 
@@ -29,6 +33,7 @@
     <string name="btnValider">Valider</string>
     <string name="btnOk">OK</string>
     <string name="btnAnnuler">Annuler</string>
+    <string name="btnConnexion">Se connecter</string>
 
     <!-- Fin messages et tritres boîte de dialogue -->
 

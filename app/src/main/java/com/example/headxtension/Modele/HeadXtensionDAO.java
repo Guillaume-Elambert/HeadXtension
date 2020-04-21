@@ -1,20 +1,69 @@
 package com.example.headxtension.Modele;
 
+import java.security.MessageDigest;
 import java.util.ArrayList;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.util.Base64;
+import android.util.Log;
+import net.sqlcipher.database.SQLiteDatabase;
+
+import com.example.headxtension.R;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+
+import static android.content.ContentValues.TAG;
 
 public class HeadXtensionDAO {
 
-    private static String base = "BDD_GSBParam.db";
     private static int version = 1;
-    private BdSQLiteOpenHelper accesBD;
+    private static SQLiteDatabase accesBD;
 
-    public HeadXtensionDAO(Context ct){
-        accesBD = new BdSQLiteOpenHelper(ct, base, null, version);
+    public HeadXtensionDAO(Context ct, String password){
+        SQLiteDatabase.loadLibs(ct);
+        BdSQLiteOpenHelper bdOpener = new BdSQLiteOpenHelper(ct, ct.getString(R.string.dbName), null, version);
+
+        try {
+            accesBD = bdOpener.getWritableDatabase(encrypt(password));
+        } catch (Exception e) {
+            accesBD = bdOpener.getWritableDatabase(password);
+            Log.e(TAG, e.toString());
+        }
+    }
+
+
+    /**
+     * Fonction qui vérifie la base de données existe
+     * @return TRUE si la base de données existe sinon FALSE
+     */
+    public static boolean checkDBExist(Context ct){
+        return BdSQLiteOpenHelper.checkDBExist(ct.getString(R.string.dbName), ct);
+    }
+
+
+    public static boolean checkBDOpenable(Context ct, String password){
+        SQLiteDatabase checkDB = null;
+
+        if(checkDBExist(ct)) {
+            BdSQLiteOpenHelper bdOpener = new BdSQLiteOpenHelper(ct, ct.getString(R.string.dbName), null, version);
+            try {
+                /*if(accesBD.isOpen()){
+                    accesBD.close();
+                }*/
+                SQLiteDatabase.loadLibs(ct);
+                checkDB = bdOpener.getReadableDatabase(encrypt(password));
+                checkDB.close();
+                //accesBD = checkDB;
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+
+        }
+
+        return checkDB != null;
     }
 
     /*--------------------------------   Start Folder   --------------------------------*/
@@ -26,11 +75,10 @@ public class HeadXtensionDAO {
      */
     public long addFolder(Folder folder){
         long ret;
-        SQLiteDatabase bd = accesBD.getWritableDatabase();
 
         ContentValues value = new ContentValues();
         value.put("name", folder.getName());
-        ret = bd.insert("Folder", null, value);
+        ret = accesBD.insert("Folder", null, value);
 
         return ret;
     }
@@ -43,12 +91,12 @@ public class HeadXtensionDAO {
     public Folder getFolder(int id){
         Folder folder = null;
         Cursor curseur;
-        curseur = accesBD.getReadableDatabase().rawQuery("SELECT * FROM Folder WHERE id="+id+";",null);
+        curseur = accesBD.rawQuery("SELECT * FROM Folder WHERE id="+id+";",null);
         if (curseur.getCount() > 0) {
             curseur.moveToFirst();
             String name = curseur.getString(1);
-            ArrayList<Credentials> credentialsArrayList = getFolderCredentials(id);
-            folder = new Folder(id, name, credentialsArrayList);
+            ArrayList<Credential> credentialArrayList = getFolderCredentials(id);
+            folder = new Folder(id, name, credentialArrayList);
         }
         curseur.close();
         return folder;
@@ -82,7 +130,7 @@ public class HeadXtensionDAO {
             }
         }
         String req = "SELECT * FROM Folder "+conditionRequete+";";
-        curseur = accesBD.getReadableDatabase().rawQuery(req,null);
+        curseur = accesBD.rawQuery(req,null);
         return cursorToFolderArrayList(curseur);
     }
 
@@ -95,16 +143,16 @@ public class HeadXtensionDAO {
         ArrayList<Folder> foldersList = new ArrayList<>();
         int id;
         String name;
-        ArrayList<Credentials> credentialsArrayList;
+        ArrayList<Credential> credentialArrayList;
 
 
         curseur.moveToFirst();
         while (!curseur.isAfterLast()) {
             id = curseur.getInt(0);
             name = curseur.getString(1);
-            credentialsArrayList = getFolderCredentials(id);
+            credentialArrayList = getFolderCredentials(id);
 
-            foldersList.add(new Folder(id, name, credentialsArrayList));
+            foldersList.add(new Folder(id, name, credentialArrayList));
             curseur.moveToNext();
         }
 
@@ -116,29 +164,28 @@ public class HeadXtensionDAO {
 
 
 
-    /*---------------------------------   Start Credentials   --------------------------------*/
+    /*---------------------------------   Start Credential   --------------------------------*/
 
     /**
      * Fonction qui ajoute des informations de connexion dans la base de données
-     * @param credentials Les informations de connexion à ajouter
+     * @param credential Les informations de connexion à ajouter
      * @return L'ID de la ligne nouvellement insérée, ou -1 si une erreur est survenue
      */
-    public long addCredentials(Credentials credentials){
-        SQLiteDatabase bd = accesBD.getWritableDatabase();
+    public long addCredential(Credential credential){
         long ret;
-        int folderId = getCredentialsFolder(credentials);
+        int folderId = getCredentialFolder(credential);
 
         ContentValues value = new ContentValues();
-        value.put("name", credentials.getName());
-        value.put("url", credentials.getUrl());
-        value.put("username", credentials.getUsername());
-        value.put("password", credentials.getPassword());
+        value.put("name", credential.getName());
+        value.put("url", credential.getUrl());
+        value.put("username", credential.getUsername());
+        value.put("password", credential.getPassword());
 
         if(folderId != -1) {
             value.put("id_Folder", folderId);
         }
 
-        ret = bd.insert("Credentials", null, value);
+        ret = accesBD.insert("Credential", null, value);
 
         return ret;
     }
@@ -148,13 +195,13 @@ public class HeadXtensionDAO {
      * @param id L'identifiant des informations de connexion à retourner
      * @return Les informations de connexion souhaitées ou NULL si une erreur est survenue
      */
-    public Credentials getCredentials(int id){
-        Credentials credentials = null;
+    public Credential getCredential(int id){
+        Credential credential = null;
         Cursor curseur;
-        curseur = accesBD.getReadableDatabase().rawQuery("SELECT * FROM Credentials WHERE id="+id+";",null);
+        curseur = accesBD.rawQuery("SELECT * FROM Credential WHERE id="+id+";",null);
         if (curseur.getCount() > 0) {
             curseur.moveToFirst();
-            credentials = new Credentials(
+            credential = new Credential(
                     curseur.getInt(0),
                     curseur.getString(1),
                     curseur.getString(2),
@@ -163,7 +210,7 @@ public class HeadXtensionDAO {
             );
         }
         curseur.close();
-        return credentials;
+        return credential;
     }
 
     /**
@@ -171,7 +218,7 @@ public class HeadXtensionDAO {
      * @param name La chaîne de caractère à comparer avec les données composant les informations de connexion
      * @return La liste des informations de connexion dont au moins une des données la composant est similaire à la chaîne de caractères passée en paramètre ou NULL si une erreur est survenue
      */
-    public ArrayList<Credentials> getCredentials(String name){
+    public ArrayList<Credential> getCredentials(String name){
         Cursor curseur;
         String conditionRequete = "";
         if(name.length()>0) {
@@ -196,21 +243,21 @@ public class HeadXtensionDAO {
             }
         }
 
-        String req = "SELECT * FROM Credentials "+conditionRequete+" ;";
-        curseur = accesBD.getReadableDatabase().rawQuery(req,null);
-        return cursorToCredentialsArrayList(curseur);
+        String req = "SELECT * FROM Credential "+conditionRequete+" ;";
+        curseur = accesBD.rawQuery(req,null);
+        return cursorToCredentialArrayList(curseur);
     }
 
 
     /**
      * Fonction qui retourne l'identifiant du dossier d'une information de connexion
-     * @param credentials Les informations de connexions dont on veut le dossier
+     * @param credential Les informations de connexions dont on veut le dossier
      * @return L'identifiant du dossier des informations de connexion souhaitées
      */
-    public int getCredentialsFolder(Credentials credentials){
+    public int getCredentialFolder(Credential credential){
         int folderId = -1;
         Cursor curseur;
-        curseur = accesBD.getReadableDatabase().rawQuery("SELECT id_Folder FROM Credentials WHERE id="+credentials.getId()+";",null);
+        curseur = accesBD.rawQuery("SELECT id_Folder FROM Credential WHERE id="+ credential.getId()+";",null);
         if (curseur.getCount() > 0) {
             curseur.moveToFirst();
             folderId = curseur.getInt(0);
@@ -224,19 +271,19 @@ public class HeadXtensionDAO {
      * @param folderId L'identifiant du dossier dont on souhaite avoir les informations de connxion qu'il contient
      * @return La liste des informations de connexion contenues dans le dossier souhaité ou NULL si une erreur est survenue
      */
-    public ArrayList<Credentials> getFolderCredentials(int folderId){
+    public ArrayList<Credential> getFolderCredentials(int folderId){
         Cursor curseur;
-        curseur = accesBD.getReadableDatabase().rawQuery("SELECT * FROM Credentials WHERE id_Folder="+folderId+";",null);
-        return cursorToCredentialsArrayList(curseur);
+        curseur = accesBD.rawQuery("SELECT * FROM Credential WHERE id_Folder="+folderId+";",null);
+        return cursorToCredentialArrayList(curseur);
     }
 
     /**
-     * Fonction qui transforme un curseur (requête à résultat multiple sur la table Credentials) en ArrayList d'informations de connexion
-     * @param curseur Le résultat d'une requête sur la table Credentials
+     * Fonction qui transforme un curseur (requête à résultat multiple sur la table Credential) en ArrayList d'informations de connexion
+     * @param curseur Le résultat d'une requête sur la table Credential
      * @return La liste des informations de connexion contenues dans le curseur passé en paramètre
      */
-    private ArrayList<Credentials> cursorToCredentialsArrayList(Cursor curseur) {
-        ArrayList<Credentials> credentialsList = new ArrayList<>();
+    private ArrayList<Credential> cursorToCredentialArrayList(Cursor curseur) {
+        ArrayList<Credential> credentialList = new ArrayList<>();
         int id;
         String name, url, username, password;
 
@@ -248,15 +295,40 @@ public class HeadXtensionDAO {
             username = curseur.getString(3);
             password = curseur.getString(4);
 
-            credentialsList.add(
-                    new Credentials(id,name, url, username, password)
+            credentialList.add(
+                    new Credential(id,name, url, username, password)
             );
 
             curseur.moveToNext();
         }
 
-        return credentialsList;
+        return credentialList;
     }
-    /*---------------------------------   End Credentials   ----------------------------------*/
+    /*---------------------------------   End Credential   ----------------------------------*/
 
+
+    private static String encrypt(String password) throws Exception{
+        SecretKeySpec key = generateKey(password);
+        Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        c.init(Cipher.ENCRYPT_MODE, key);
+        byte[] encodedValue = c.doFinal(password.getBytes());
+        return Base64.encodeToString(encodedValue, Base64.DEFAULT);
+    }
+
+    private static String decrypt(String inputString, String password) throws Exception{
+        SecretKeySpec key = generateKey(password);
+        Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        c.init(Cipher.DECRYPT_MODE, key);
+        byte[] decodedValue = Base64.decode(inputString, Base64.DEFAULT);
+        decodedValue = c.doFinal(decodedValue);
+        return new String(decodedValue);
+    }
+
+    private static SecretKeySpec generateKey(String password) throws Exception{
+        final MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] passwordBytes = password.getBytes("UTF-8");
+        digest.update(passwordBytes, 0, passwordBytes.length);
+        byte[] key = digest.digest();
+        return new SecretKeySpec(key, "AES");
+    }
 }

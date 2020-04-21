@@ -1,7 +1,7 @@
 ------------------------------------------------------------
 -- Table: Credentials
 ------------------------------------------------------------
-CREATE TABLE Credentials(
+CREATE TABLE Credential(
 	id           INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT ,
 	name         TEXT NOT NULL ,
 	url          TEXT NOT NULL ,
@@ -9,5 +9,5 @@ CREATE TABLE Credentials(
 	password     INTEGER NOT NULL ,
 	id_Folder    INTEGER
 
-	,CONSTRAINT Credentials_Folder_FK FOREIGN KEY (id_Folder) REFERENCES Folder(id)
+	,CONSTRAINT Credential_Folder_FK FOREIGN KEY (id_Folder) REFERENCES Folder(id)
 );

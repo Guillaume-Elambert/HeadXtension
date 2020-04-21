@@ -3,12 +3,12 @@ package com.example.headxtension.Modele;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class Credentials {
+public class Credential {
 
     private int id;
     private String name, url, username, password;
 
-    public Credentials(int id, String name, @NonNull String url, @NonNull String username, @NonNull String password){
+    public Credential(int id, String name, @NonNull String url, @NonNull String username, @NonNull String password){
         this.id = id;
         this.name = name;
         this.url = url;

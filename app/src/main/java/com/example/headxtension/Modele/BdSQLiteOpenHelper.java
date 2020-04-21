@@ -1,8 +1,10 @@
 package com.example.headxtension.Modele;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+//import android.database.sqlite.SQLiteDatabase;
+//import android.database.sqlite.SQLiteOpenHelper;
+import net.sqlcipher.database.SQLiteDatabase;
+import net.sqlcipher.database.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.io.InputStream;
@@ -16,7 +18,7 @@ public class BdSQLiteOpenHelper extends SQLiteOpenHelper  {
     private Context mContext;
 
 
-    public BdSQLiteOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    BdSQLiteOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
         this.mContext = context;
         context.deleteDatabase( name /*"DB_HeadXtension.db"*/);
@@ -25,7 +27,7 @@ public class BdSQLiteOpenHelper extends SQLiteOpenHelper  {
     // Called when the database connection is being configured.
     // Configure database settings for things like foreign key support, write-ahead logging, etc.
     @Override
-    public void onConfigure(SQLiteDatabase db) {
+    public void onConfigure(net.sqlcipher.database.SQLiteDatabase db) {
         super.onConfigure(db);
         db.setForeignKeyConstraintsEnabled(true);
     }
@@ -62,8 +64,7 @@ public class BdSQLiteOpenHelper extends SQLiteOpenHelper  {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // TODO Auto-generated method stub
-
+        //Rien
     }
 
     /**
@@ -74,7 +75,7 @@ public class BdSQLiteOpenHelper extends SQLiteOpenHelper  {
      * @return La liste des chemins des fichiers qui composent ce dossier
      * @throws Exception Impossible de lire le fichier
      */
-    public ArrayList<String> getFichiersAssets(String dossier, ArrayList<String> listeFichiers) throws Exception {
+    private ArrayList<String> getFichiersAssets(String dossier, ArrayList<String> listeFichiers) throws Exception {
         String[] listeDesFichiers = this.mContext.getAssets().list(dossier);
         if(listeDesFichiers != null && listeDesFichiers.length > 0){
             for(String unFichier : listeDesFichiers){
@@ -84,6 +85,15 @@ public class BdSQLiteOpenHelper extends SQLiteOpenHelper  {
             listeFichiers.add(dossier);
         }
         return listeFichiers;
+    }
+
+    /**
+     * Fonction qui vérifie si une base de données existe
+     * @param name Nom de la base de données
+     * @return TRUE si la base de données existe sinon FALSE
+     */
+    static boolean checkDBExist(String name, Context context){
+        return context.getDatabasePath(name).exists();
     }
 
 

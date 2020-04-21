@@ -7,11 +7,15 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
+import com.example.headxtension.Modele.HeadXtensionDAO;
 import com.example.headxtension.R;
 
 public class SecondFragment extends Fragment {
+
+    private NavController navController;
 
     @Override
     public View onCreateView(
@@ -24,7 +28,19 @@ public class SecondFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
 
+        if(!HeadXtensionDAO.checkDBExist(getActivity())){
+            navController.navigate(R.id.SigninFragment);
+        } else {
+            /*requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(),
+                    new OnBackPressedCallback(true) {
+                        @Override
+                        public void handleOnBackPressed() {
+                        }
+                    }
+            );*/
+        }
         /*view.findViewById(R.id.button_second).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
