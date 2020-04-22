@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.Menu;
@@ -23,16 +24,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        NavController navController = navHostFragment.getNavController();
+
+        Session session = Session.getInstance();
+        session.Initialize(getApplicationContext());
 
         //deleteDatabase(getString(R.string.dbName));
         // aaAA11&&
         //njiwJQA6CscGPriBsw2GkQ==
 
-        Session session = Session.getInstance();
-        session.Initialize(getApplicationContext());
+
         session.setRegistrationState(HeadXtensionDAO.checkDBExist(getApplicationContext()));
-        Log.d("dbText",String.valueOf(session.getAuthenticationState()));
         session.setAuthenticationState(false);
 
         /*
@@ -43,13 +46,10 @@ public class MainActivity extends AppCompatActivity {
          */
         if(session.getRegistrationState()) {
             if(session.getAuthenticationState()){
-                navController.navigate(R.id.MainPageFragment);
-            } else {
-                Log.d("pk?","jsp");
-                navController.navigate(R.id.LoginFragment);
+                navController.navigate(R.id.action_LoginRegisterNavigation_to_AppNavigation);
             }
         } else {
-            navController.navigate(R.id.SigninFragment);
+           navController.navigate(R.id.SigninFragment);
         }
 
         Toolbar toolbar = findViewById(R.id.toolbar);

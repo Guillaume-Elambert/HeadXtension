@@ -6,8 +6,6 @@ import android.preference.PreferenceManager;
 
 public class Session{
     private static Session mInstance;
-    private Context mContext;
-    //
     private SharedPreferences mMyPreferences;
 
     private Session(){ }
@@ -18,8 +16,7 @@ public class Session{
     }
 
     public void Initialize(Context ctxt){
-        mContext = ctxt;
-        mMyPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        mMyPreferences = PreferenceManager.getDefaultSharedPreferences(ctxt);
     }
 
     public void setStringPreference(String key, String value){

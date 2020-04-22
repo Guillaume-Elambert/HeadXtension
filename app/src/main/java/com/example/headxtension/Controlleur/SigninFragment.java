@@ -18,7 +18,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.headxtension.Modele.HeadXtensionDAO;
 import com.example.headxtension.Modele.Session;
@@ -49,17 +51,17 @@ public class SigninFragment extends Fragment {
     public void onViewCreated(@NonNull final View view, Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-        navController = Navigation.findNavController(view);
+        Log.d(TAG,"entrée signin");
+        navController = NavHostFragment.findNavController(this);
 
         if(HeadXtensionDAO.checkDBExist(getActivity())){
-            navController.navigate(R.id.MainPageFragment);
+            navController.navigate(R.id.action_LoginRegisterNavigation_to_AppNavigation);
         } else {
 
             final EditText password = view.findViewById(R.id.passwordSignin);
             final EditText passwordCheck = view.findViewById(R.id.checkPasswordSignin);
 
             final TextInputLayout passwordLayout = view.findViewById(R.id.password_text_input);
-            final TextInputLayout chackPasswordLayout = view.findViewById(R.id.check_password_text_input);
 
             //Ajout d'un évennement de saisi sur le champ du mot de passe maître
             password.addTextChangedListener(new TextWatcher() {
@@ -167,6 +169,7 @@ public class SigninFragment extends Fragment {
                 }
 
             });
+
 
             //ajout d'un évènement de clic sur le bouton de validation du formulaire
             view.findViewById(R.id.btnValider).setOnClickListener(new View.OnClickListener() {
@@ -301,7 +304,7 @@ public class SigninFragment extends Fragment {
                         session.setRegistrationState(true);
                         session.setAuthenticationState(true);
 
-                        navController.navigate(R.id.MainPageFragment);
+                        navController.navigate(R.id.action_LoginRegisterNavigation_to_AppNavigation);
                     }
                 }
             );

@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.headxtension.Modele.HeadXtensionDAO;
 import com.example.headxtension.Modele.Session;
@@ -40,8 +41,8 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull final View view, Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-        navController = Navigation.findNavController(view);
-        Log.d("bddTest",String.valueOf(session.getRegistrationState()));
+        navController = NavHostFragment.findNavController(this);
+        Log.d("entréeLogin",String.valueOf(session.getRegistrationState()));
 
         if(session.getRegistrationState()) {
             final TextInputLayout passwordLayout = view.findViewById(R.id.password_text_input);
@@ -70,7 +71,7 @@ public class LoginFragment extends Fragment {
                             public void onClick(View view) {
                                 if (HeadXtensionDAO.checkBDOpenable(requireActivity().getBaseContext(), password.getText().toString())) {
                                     session.setAuthenticationState(true);
-                                    navController.navigate(R.id.MainPageFragment);
+                                    navController.navigate(R.id.action_LoginRegisterNavigation_to_AppNavigation);
                                 } else {
                                     passwordLayout.setError(getString(R.string.loginWrongPassword));
                                 }
@@ -96,7 +97,7 @@ public class LoginFragment extends Fragment {
                 }
             });
         } else {
-                navController.navigate(R.id.SigninFragment);
+                navController.navigate(R.id.action_LoginFragment_to_SigninFragment);
         }
     }
 

@@ -33,35 +33,29 @@ public class MainPageFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = Navigation.findNavController(view);
+        navController = NavHostFragment.findNavController(this);
         Session session = Session.getInstance();
 
-        if(session.getRegistrationState()){
-            if(session.getAuthenticationState()){
-                /*requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(),
-                    new OnBackPressedCallback(true) {
-                        @Override
-                        public void handleOnBackPressed() {
-                        }
-                    }
-                );*/
-
-                FloatingActionButton fab = view.findViewById(R.id.fab);
-                fab.setOnClickListener(new View.OnClickListener() {
+        if(session.getRegistrationState() && session.getAuthenticationState()){
+            /*requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(),
+                new OnBackPressedCallback(true) {
                     @Override
-                    public void onClick(View view) {
-                        /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();*/
-                        navController.navigate(R.id.NewCredentialFragment);
-                        //NavHostFragment.findNavController(MainPageFragment.this).navigate(R.id.NewCredentialFragment);
-                       // navController.navigate(R.id.action_MainPageFragment_to_NewCredentialFragment);
+                    public void handleOnBackPressed() {
                     }
-                });
-            } else {
-                navController.navigate(R.id.LoginFragment);
-            }
+                }
+            );*/
+
+            FloatingActionButton fab = view.findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();*/
+                    navController.navigate(R.id.action_MainPageFragment_to_NewCredentialFragment);
+                }
+            });
         } else {
-            navController.navigate(R.id.SigninFragment);
+            navController.navigate(R.id.action_AppNavigation_to_LoginRegisterNavigation);
         }
         /*view.findViewById(R.id.button_second).setOnClickListener(new View.OnClickListener() {
             @Override

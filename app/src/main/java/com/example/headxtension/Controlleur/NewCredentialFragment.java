@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.headxtension.Modele.HeadXtensionDAO;
 import com.example.headxtension.Modele.Session;
@@ -16,7 +17,7 @@ import com.example.headxtension.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-class NewCredentialFragment extends Fragment {
+public class NewCredentialFragment extends Fragment {
 
     private NavController navController;
 
@@ -32,7 +33,7 @@ class NewCredentialFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = Navigation.findNavController(view);
+        navController = NavHostFragment.findNavController(this);
         Session session = Session.getInstance();
     }
 }
