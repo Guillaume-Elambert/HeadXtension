@@ -15,14 +15,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+public class LoginRegisterActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("Activité principale","OK");
-        setContentView(R.layout.activity_main);
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main_nav_host_fragment);
+        Log.d("Login activity","OK");
+        setContentView(R.layout.activity_login_register);
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         NavController navController = navHostFragment.getNavController();
 
         Session session = Session.getInstance();
@@ -32,13 +32,21 @@ public class MainActivity extends AppCompatActivity {
         // aaAA11&&
         //njiwJQA6CscGPriBsw2GkQ==
 
+
+        session.setRegistrationState(HeadXtensionDAO.checkDBExist(getApplicationContext()));
+        session.setAuthenticationState(false);
+
         /*
          * Entrée : l'utilisateur s'est déjà connecté auparavant
          *          => on continu les vérifs
          *
          * Sinon => on continu les vérifs
          */
-        if(!session.getRegistrationState() || !session.getAuthenticationState()) {
+        if(session.getRegistrationState()) {
+            if(session.getAuthenticationState()){
+                navController.navigate(R.id.action_LoginRegisterNavigation_to_MainActivity);
+            }
+        } else {
             navController.navigate(R.id.SigninFragment);
         }
 
@@ -48,8 +56,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Session session = Session.getInstance();
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        if(session.getRegistrationState() && session.getAuthenticationState()) {
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+        }
         return true;
     }
 

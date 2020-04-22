@@ -8,14 +8,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.headxtension.Modele.HeadXtensionDAO;
 import com.example.headxtension.Modele.Session;
 import com.example.headxtension.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 public class MainPageFragment extends Fragment {
 
@@ -55,7 +52,7 @@ public class MainPageFragment extends Fragment {
                 }
             });
         } else {
-            navController.navigate(R.id.action_AppNavigation_to_LoginRegisterNavigation);
+            navController.navigate(R.id.action_AppNavigation_to_LoginRegisterActivity);
         }
         /*view.findViewById(R.id.button_second).setOnClickListener(new View.OnClickListener() {
             @Override

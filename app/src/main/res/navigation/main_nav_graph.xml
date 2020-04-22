@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/AppNavigation">
+
+    <navigation
+        android:id="@+id/AppNavigation"
+        app:startDestination="@id/MainPageFragment" >
+        <fragment
+            android:id="@+id/MainPageFragment"
+            android:name="com.example.headxtension.Controlleur.MainPageFragment"
+            android:label="@string/main_page_fragment_label"
+            tools:layout="@layout/fragment_main_page">
+
+            <action
+                android:id="@+id/action_MainPageFragment_to_NewCredentialFragment"
+                app:destination="@id/NewCredentialFragment"
+                app:popUpToInclusive="false" />
+
+        </fragment>
+        <fragment
+            android:id="@+id/NewCredentialFragment"
+            android:name="com.example.headxtension.Controlleur.NewCredentialFragment"
+            android:label="@string/main_page_fragment_label"
+            tools:layout="@layout/fragment_new_credential_entry" />
+        <action
+            android:id="@+id/action_AppNavigation_to_LoginRegisterActivity"
+            app:destination="@id/LoginRegisterActivity"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/AppNavigation"
+            app:popUpToInclusive="true" />
+    </navigation>
+
+
+    <activity
+        android:id="@+id/LoginRegisterActivity"
+        android:name="com.example.headxtension.Controlleur.LoginRegisterActivity"
+        tools:layout="@layout/activity_login_register" />
+
+
+</navigation>

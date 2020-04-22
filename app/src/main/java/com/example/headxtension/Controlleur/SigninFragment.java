@@ -18,8 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.NavOptions;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.headxtension.Modele.HeadXtensionDAO;
@@ -55,7 +53,7 @@ public class SigninFragment extends Fragment {
         navController = NavHostFragment.findNavController(this);
 
         if(HeadXtensionDAO.checkDBExist(getActivity())){
-            navController.navigate(R.id.action_LoginRegisterNavigation_to_AppNavigation);
+            navController.navigate(R.id.action_LoginRegisterNavigation_to_MainActivity);
         } else {
 
             final EditText password = view.findViewById(R.id.passwordSignin);
@@ -304,7 +302,7 @@ public class SigninFragment extends Fragment {
                         session.setRegistrationState(true);
                         session.setAuthenticationState(true);
 
-                        navController.navigate(R.id.action_LoginRegisterNavigation_to_AppNavigation);
+                        navController.navigate(R.id.action_LoginRegisterNavigation_to_MainActivity);
                     }
                 }
             );

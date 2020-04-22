@@ -1,5 +1,6 @@
 package com.example.headxtension.Controlleur;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.ActivityNavigator;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -49,6 +51,10 @@ public class LoginFragment extends Fragment {
             final EditText password = view.findViewById(R.id.passwordLogin);
             final MaterialButton btnConnexion = view.findViewById(R.id.btnConnexion);
 
+            //ActivityNavigator activityNavigator = new ActivityNavigator(this);
+            //activityNavigator.navigate(activityNavigator.createDestination().setIntent(new Intent(requireContext(), MainActivity.class)), null, null, null);
+            //NavHostFragment.findNavController(this).navigate (new Intent(requireContext(), MainActivity.class));
+
             password.addTextChangedListener(new TextWatcher() {
 
                 /*
@@ -71,7 +77,8 @@ public class LoginFragment extends Fragment {
                             public void onClick(View view) {
                                 if (HeadXtensionDAO.checkBDOpenable(requireActivity().getBaseContext(), password.getText().toString())) {
                                     session.setAuthenticationState(true);
-                                    navController.navigate(R.id.action_LoginRegisterNavigation_to_AppNavigation);
+                                    //startActivity(new Intent(requireActivity(), MainActivity.class));
+                                    navController.navigate(R.id.action_LoginRegisterNavigation_to_MainActivity);
                                 } else {
                                     passwordLayout.setError(getString(R.string.loginWrongPassword));
                                 }
